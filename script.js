@@ -362,6 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (savedTheme === 'dark') {
             document.body.setAttribute('data-theme', 'dark');
             themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            generateStars();
         }
 
         themeToggle.addEventListener('click', () => {
@@ -370,12 +371,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.body.removeAttribute('data-theme');
                 localStorage.setItem('kanbanTheme', 'light');
                 themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                clearStars();
             } else {
                 document.body.setAttribute('data-theme', 'dark');
                 localStorage.setItem('kanbanTheme', 'dark');
                 themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                generateStars();
             }
         });
+    }
+
+    function generateStars() {
+        const container = document.getElementById('twinkle-container');
+        if (!container) return;
+        container.innerHTML = ''; // clear existing
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // Random properties
+            const size = Math.random() * 3 + 1; // 1px to 4px
+            const left = Math.random() * 100;
+            const top = Math.random() * 100;
+            const delay = Math.random() * 5;
+            const duration = Math.random() * 3 + 2;
+            
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${left}%`;
+            star.style.top = `${top}%`;
+            star.style.animationDelay = `${delay}s`;
+            star.style.animationDuration = `${duration}s`;
+            
+            container.appendChild(star);
+        }
+    }
+
+    function clearStars() {
+        const container = document.getElementById('twinkle-container');
+        if (container) container.innerHTML = '';
     }
 
     // 2. Export / Import Data

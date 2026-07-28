@@ -22,23 +22,27 @@
 }
 
 body[data-theme="dark"] {
-    --bg-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-    --glass-bg: rgba(26, 32, 44, 0.6);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    --bg-gradient: radial-gradient(circle at center, #1b0f2a 0%, #080812 100%);
+    --glass-bg: rgba(10, 10, 20, 0.7);
+    --glass-border: rgba(0, 243, 255, 0.3);
+    --glass-shadow: 0 0 20px rgba(0, 243, 255, 0.1), inset 0 0 15px rgba(255, 0, 255, 0.05);
     
-    --card-bg: rgba(45, 55, 72, 0.85);
-    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    --card-bg: rgba(20, 20, 35, 0.85);
+    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 8px rgba(0, 243, 255, 0.2);
+    --card-border-glow: 1px solid rgba(255, 0, 255, 0.3);
     
-    --text-main: #f7fafc;
-    --text-muted: #a0aec0;
+    --text-main: #e0f2fe;
+    --text-muted: #94a3b8;
     
-    --priority-high: #742a2a;
-    --priority-high-text: #fc8181;
-    --priority-medium: #7b341e;
-    --priority-medium-text: #f6ad55;
-    --priority-low: #22543d;
-    --priority-low-text: #68d391;
+    --priority-high: rgba(255, 0, 85, 0.15);
+    --priority-high-text: #ff1e56;
+    --priority-medium: rgba(255, 170, 0, 0.15);
+    --priority-medium-text: #ffaa00;
+    --priority-low: rgba(0, 255, 136, 0.15);
+    --priority-low-text: #00ff88;
+    
+    --accent-color: #bc13fe;
+    --accent-hover: #ff00ff;
 }
 
 * {
@@ -510,4 +514,90 @@ body[data-theme="dark"] .search-group select {
 .text-overdue {
     color: #e53e3e !important;
     font-weight: 600;
+}
+body[data-theme="dark"] .text-overdue {
+    color: #ff1e56 !important;
+    text-shadow: 0 0 5px rgba(255, 30, 86, 0.5);
+}
+
+/* =========================================
+   GAMING / NEON THEME ADDITIONS (DARK MODE)
+   ========================================= */
+
+/* Twinkling Background */
+#twinkle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+body[data-theme="dark"] #twinkle-container {
+    opacity: 1;
+}
+
+.star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle linear infinite;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.1; transform: scale(1) translateY(0); }
+    50% { opacity: 1; transform: scale(1.5) translateY(-5px); box-shadow: 0 0 10px #00f3ff, 0 0 20px #bc13fe; }
+    100% { opacity: 0.1; transform: scale(1) translateY(-10px); }
+}
+
+/* Title Neon Glow */
+body[data-theme="dark"] .app-header h1 {
+    color: #fff;
+    text-shadow: 
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 20px #00f3ff,
+        0 0 40px #00f3ff,
+        0 0 80px #00f3ff;
+}
+
+/* Task Cards Neon Interaction */
+body[data-theme="dark"] .task-card {
+    border: var(--card-border-glow);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+body[data-theme="dark"] .task-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.8), 
+        0 0 15px rgba(0, 243, 255, 0.5), 
+        0 0 30px rgba(255, 0, 255, 0.3);
+    border-color: #00f3ff;
+    z-index: 10;
+}
+
+/* Button RGB Animation */
+body[data-theme="dark"] #add-task-btn,
+body[data-theme="dark"] .icon-btn {
+    border: 1px solid transparent;
+    box-shadow: 0 0 10px rgba(188, 19, 254, 0.5);
+    animation: rgbBorder 3s infinite linear;
+}
+
+@keyframes rgbBorder {
+    0% { border-color: #00f3ff; box-shadow: 0 0 10px rgba(0, 243, 255, 0.6); }
+    33% { border-color: #ff00ff; box-shadow: 0 0 10px rgba(255, 0, 255, 0.6); }
+    66% { border-color: #bc13fe; box-shadow: 0 0 10px rgba(188, 19, 254, 0.6); }
+    100% { border-color: #00f3ff; box-shadow: 0 0 10px rgba(0, 243, 255, 0.6); }
+}
+
+/* Custom Scrollbar for dark mode boards */
+body[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #00f3ff, #bc13fe);
+    border-radius: 4px;
 }
