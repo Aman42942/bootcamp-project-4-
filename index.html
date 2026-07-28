@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Author: Aman Kumar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow - Smart Kanban</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="toast-container"></div>
+    
+    <div class="glass-container main-wrapper">
+        <header class="app-header">
+            <div class="quote-container">
+                <i class="fa-solid fa-quote-left"></i>
+                <p id="daily-quote">Loading daily motivation...</p>
+                <i class="fa-solid fa-quote-right"></i>
+            </div>
+            <h1>TaskFlow</h1>
+        </header>
+
+        <section class="controls-section">
+            <div class="task-input-group">
+                <input type="text" id="task-input" placeholder="What needs to be done?" autocomplete="off">
+                <input type="date" id="due-date-input" title="Due Date">
+                <select id="tag-select" title="Category Tag">
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                    <option value="College">College</option>
+                    <option value="Other">Other</option>
+                </select>
+                <select id="priority-select">
+                    <option value="Low">Low Priority</option>
+                    <option value="Medium">Medium Priority</option>
+                    <option value="High">High Priority</option>
+                </select>
+                <button id="add-task-btn"><i class="fa-solid fa-plus"></i> Add</button>
+            </div>
+            <div class="search-group">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="search-input" placeholder="Search tasks...">
+            </div>
+        </section>
+
+        <main class="kanban-board">
+            <!-- To Do Column -->
+            <div class="kanban-column" id="todo-column" data-status="todo">
+                <div class="column-header">
+                    <h2>To-Do <span class="task-count" id="todo-count">0</span></h2>
+                </div>
+                <div class="kanban-cards-container" id="todo-cards">
+                    <div class="empty-state">No tasks here</div>
+                </div>
+            </div>
+
+            <!-- In Progress Column -->
+            <div class="kanban-column" id="in-progress-column" data-status="in-progress">
+                <div class="column-header">
+                    <h2>In-Progress <span class="task-count" id="in-progress-count">0</span></h2>
+                </div>
+                <div class="kanban-cards-container" id="in-progress-cards">
+                    <div class="empty-state">No tasks here</div>
+                </div>
+            </div>
+
+            <!-- Done Column -->
+            <div class="kanban-column" id="done-column" data-status="done">
+                <div class="column-header">
+                    <h2>Done <span class="task-count" id="done-count">0</span></h2>
+                    <button id="clear-done-btn" class="clear-btn" title="Clear all done tasks"><i class="fa-solid fa-broom"></i></button>
+                </div>
+                <div class="kanban-cards-container" id="done-cards">
+                    <div class="empty-state">No tasks here</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
