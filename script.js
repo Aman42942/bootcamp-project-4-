@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearDoneBtn = document.getElementById('clear-done-btn');
     const quoteElement = document.getElementById('daily-quote');
     const toastContainer = document.getElementById('toast-container');
+    const themeToggle = document.getElementById('theme-toggle');
+    const exportBtn = document.getElementById('export-btn');
+    const importFile = document.getElementById('import-file');
+    const sortSelect = document.getElementById('sort-select');
+    const alarmSound = document.getElementById('alarm-sound');
 
     // --- State Management ---
     let tasks = JSON.parse(localStorage.getItem('kanbanTasks')) || [];
@@ -22,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchDailyQuote();
 
     function initBoard() {
+        initTheme();
+        startReminderSystem();
         renderAllTasks();
         updateCounters();
         setupDragAndDrop();
@@ -103,14 +110,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let dateHTML = `<i class="fa-regular fa-clock"></i> ${task.createdAt}`;
         if (task.dueDate) {
-            const today = new Date();
-            today.setHours(0,0,0,0);
-            const due = new Date(task.dueDate);
-            // adjust for local timezone offset so '2023-10-15' isn't parsed as previous day due to UTC
-            due.setMinutes(due.getMinutes() + due.getTimezoneOffset());
-            const isOverdue = due < today;
-            const overdueClass = isOverdue && task.status !== 'done' ? 'text-overdue' : '';
-            dateHTML += ` | <span class="${overdueClass}" title="Due Date"><i class="fa-regular fa-calendar"></i> ${task.dueDate}</span>`;
+            const dueDateTime = new Date(task.dueDate);
+            const isOverdue = dueDateTime < new Date() && task.status !== 'done';
+            
+            // Format to a readable string like "Aug 20, 04:30 PM"
+            const options = { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };
+            const formattedDue = dueDateTime.toLocaleDateString('en-US', options);
+
+            dateHTML = `<span class="${isOverdue ? 'overdue-alert' : ''}"><i class="fa-solid fa-calendar-day"></i> Due: ${formattedDue}</span>`;
         }
         
         let tagHTML = task.tag ? `<span class="tag-badge">${task.tag}</span>` : '';
@@ -150,14 +157,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const lowerFilter = filterText.toLowerCase();
+        
+        // Sorting Logic
+        let sortedTasks = [...tasks];
+        const sortMode = sortSelect ? sortSelect.value : 'default';
+        
+        if (sortMode === 'priority') {
+            const priorityWeight = { 'High': 3, 'Medium': 2, 'Low': 1 };
+            sortedTasks.sort((a, b) => priorityWeight[b.priority] - priorityWeight[a.priority]);
+        } else if (sortMode === 'dueDate') {
+            sortedTasks.sort((a, b) => {
+                if (!a.dueDate) return 1;
+                if (!b.dueDate) return -1;
+                return new Date(a.dueDate) - new Date(b.dueDate);
+            });
+        }
 
-        tasks.forEach(task => {
+        sortedTasks.forEach(task => {
             if (task.text.toLowerCase().includes(lowerFilter)) {
                 const container = document.getElementById(`${task.status}-cards`);
                 if (container) {
                     container.appendChild(createTaskElement(task));
                 }
             }
+        });
+    }
+
+    if (sortSelect) {
+        sortSelect.addEventListener('change', () => {
+            renderAllTasks(searchInput.value);
         });
     }
 
@@ -282,9 +310,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     const taskId = draggedCard.id;
                     const taskIndex = tasks.findIndex(t => t.id === taskId);
                     if (taskIndex > -1) {
+                        const oldStatus = tasks[taskIndex].status;
                         tasks[taskIndex].status = newStatus;
                         saveTasks();
                         updateCounters();
+                        
+                        // 🎉 Confetti if moved to done
+                        if (newStatus === 'done' && oldStatus !== 'done') {
+                            if (typeof confetti === 'function') {
+                                confetti({
+                                    particleCount: 100,
+                                    spread: 70,
+                                    origin: { y: 0.6 }
+                                });
+                            }
+                        }
                     }
                 }
             });
@@ -311,6 +351,97 @@ document.addEventListener('DOMContentLoaded', () => {
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    }
+
+    // --- Advanced Features ---
+    
+    // 1. Theme Toggle
+    function initTheme() {
+        if (!themeToggle) return;
+        const savedTheme = localStorage.getItem('kanbanTheme') || 'light';
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.body.removeAttribute('data-theme');
+                localStorage.setItem('kanbanTheme', 'light');
+                themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('kanbanTheme', 'dark');
+                themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            }
+        });
+    }
+
+    // 2. Export / Import Data
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            const dataStr = JSON.stringify(tasks, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'taskflow_backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Backup Exported!');
+        });
+    }
+
+    if (importFile) {
+        importFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const importedTasks = JSON.parse(event.target.result);
+                    if (Array.isArray(importedTasks)) {
+                        tasks = importedTasks;
+                        saveTasks();
+                        renderAllTasks(searchInput.value);
+                        updateCounters();
+                        showToast('Backup Imported Successfully!');
+                    }
+                } catch (err) {
+                    showToast('Error: Invalid Backup File');
+                }
+            };
+            reader.readAsText(file);
+        });
+    }
+
+    // 3. Reminder System
+    function startReminderSystem() {
+        if (!alarmSound) return;
+        // Check every minute
+        setInterval(() => {
+            const now = new Date();
+            let triggered = false;
+            
+            tasks.forEach(task => {
+                if (task.dueDate && task.status !== 'done' && !task.notified) {
+                    const dueDateTime = new Date(task.dueDate);
+                    // If due date is reached or passed within the last 2 minutes
+                    const diffMs = now - dueDateTime;
+                    if (diffMs >= 0 && diffMs < 120000) {
+                        task.notified = true; // prevent re-triggering
+                        triggered = true;
+                        showToast(`⏰ REMINDER: "${task.text}" is due!`);
+                    }
+                }
+            });
+            
+            if (triggered) {
+                saveTasks();
+                alarmSound.play().catch(e => console.log('Audio play prevented by browser'));
+            }
+        }, 60000); // 1 minute
     }
 
     if (clearDoneBtn) {

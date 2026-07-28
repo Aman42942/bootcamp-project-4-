@@ -21,6 +21,26 @@
     --accent-hover: #3b5bdb;
 }
 
+body[data-theme="dark"] {
+    --bg-gradient: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    --glass-bg: rgba(26, 32, 44, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    
+    --card-bg: rgba(45, 55, 72, 0.85);
+    --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    
+    --text-main: #f7fafc;
+    --text-muted: #a0aec0;
+    
+    --priority-high: #742a2a;
+    --priority-high-text: #fc8181;
+    --priority-medium: #7b341e;
+    --priority-medium-text: #f6ad55;
+    --priority-low: #22543d;
+    --priority-low-text: #68d391;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -60,10 +80,46 @@ body {
     border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.data-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.icon-btn {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-main);
+    transition: all 0.3s ease;
+}
+
+body[data-theme="dark"] .icon-btn {
+    background: rgba(0,0,0,0.3);
+}
+
+.icon-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
 .app-header h1 {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #1a202c;
+    color: var(--text-main);
     margin-top: 15px;
     letter-spacing: -0.5px;
 }
@@ -119,6 +175,14 @@ body {
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 }
 
+body[data-theme="dark"] .task-input-group input, 
+body[data-theme="dark"] .task-input-group select,
+body[data-theme="dark"] .search-group input {
+    background: rgba(0,0,0,0.3);
+    color: var(--text-main);
+    border-color: rgba(255,255,255,0.1);
+}
+
 .task-input-group input:focus, 
 .task-input-group select:focus,
 .search-group input:focus {
@@ -156,9 +220,11 @@ body {
 .search-group {
     position: relative;
     min-width: 250px;
+    display: flex;
+    gap: 10px;
 }
 
-.search-group i {
+.search-group > i {
     position: absolute;
     left: 15px;
     top: 50%;
@@ -167,8 +233,21 @@ body {
 }
 
 .search-group input {
-    width: 100%;
+    flex: 1;
     padding-left: 40px;
+}
+
+.search-group select {
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.9);
+    color: var(--text-main);
+    outline: none;
+}
+body[data-theme="dark"] .search-group select {
+    background: rgba(0,0,0,0.3);
+    border-color: rgba(255,255,255,0.1);
 }
 
 /* Kanban Board Layout */
