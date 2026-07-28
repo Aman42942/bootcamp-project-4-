@@ -144,13 +144,38 @@ body[data-theme="dark"] .icon-btn {
 /* Controls Section */
 .controls-section {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-direction: column;
+    gap: 15px;
     background: rgba(255,255,255,0.5);
     padding: 15px 25px;
     border-radius: 15px;
+}
+
+body[data-theme="dark"] .controls-section {
+    background: rgba(0,0,0,0.2);
+}
+
+.controls-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.tips-bar {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: rgba(76, 110, 245, 0.1);
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+body[data-theme="dark"] .tips-bar {
+    background: rgba(76, 110, 245, 0.2);
+    color: #a0aec0;
 }
 
 .task-input-group {
@@ -159,6 +184,7 @@ body[data-theme="dark"] .icon-btn {
     flex: 1;
     min-width: 300px;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .task-input-group input, 
@@ -190,8 +216,9 @@ body[data-theme="dark"] .search-group input {
     box-shadow: 0 0 0 3px rgba(76, 110, 245, 0.2);
 }
 
-.task-input-group input {
+.task-input-group input#task-input {
     flex: 1;
+    min-width: 200px;
 }
 
 .task-input-group button {

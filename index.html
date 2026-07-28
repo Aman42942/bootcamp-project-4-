@@ -5,7 +5,7 @@
     <!-- Author: Aman Kumar -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskFlow - Smart Kanban</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -32,30 +32,35 @@
         </header>
 
         <section class="controls-section">
-            <div class="task-input-group">
-                <input type="text" id="task-input" placeholder="What needs to be done?" autocomplete="off">
-                <input type="datetime-local" id="due-date-input" title="Due Date & Time">
-                <select id="tag-select" title="Category Tag">
-                    <option value="Work">Work</option>
-                    <option value="Personal">Personal</option>
-                    <option value="College">College</option>
-                    <option value="Other">Other</option>
-                </select>
-                <select id="priority-select">
-                    <option value="Low">Low Priority</option>
-                    <option value="Medium">Medium Priority</option>
-                    <option value="High">High Priority</option>
-                </select>
-                <button id="add-task-btn"><i class="fa-solid fa-plus"></i> Add</button>
+            <div class="controls-main">
+                <div class="task-input-group">
+                    <input type="text" id="task-input" placeholder="What needs to be done?" autocomplete="off">
+                    <input type="datetime-local" id="due-date-input" title="Due Date & Time">
+                    <select id="tag-select" title="Category Tag">
+                        <option value="Work">Work</option>
+                        <option value="Personal">Personal</option>
+                        <option value="College">College</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <select id="priority-select">
+                        <option value="Low">Low Priority</option>
+                        <option value="Medium">Medium Priority</option>
+                        <option value="High">High Priority</option>
+                    </select>
+                    <button id="add-task-btn"><i class="fa-solid fa-plus"></i> Add</button>
+                </div>
+                <div class="search-group">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="search-input" placeholder="Search tasks...">
+                    <select id="sort-select" title="Sort Tasks">
+                        <option value="default">Default Sort</option>
+                        <option value="priority">Sort by Priority</option>
+                        <option value="dueDate">Sort by Due Date</option>
+                    </select>
+                </div>
             </div>
-            <div class="search-group">
-                <i class="fa-solid fa-search"></i>
-                <input type="text" id="search-input" placeholder="Search tasks...">
-                <select id="sort-select" title="Sort Tasks">
-                    <option value="default">Default Sort</option>
-                    <option value="priority">Sort by Priority</option>
-                    <option value="dueDate">Sort by Due Date</option>
-                </select>
+            <div class="tips-bar">
+                <i class="fa-solid fa-lightbulb"></i> <strong>Pro Tip:</strong> Drag & Drop cards to change status. Double-click any task to edit its text!
             </div>
         </section>
 
@@ -95,6 +100,6 @@
 
     <audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="script.js?v=2"></script>
+    <script src="script.js?v=3"></script>
 </body>
 </html>
