@@ -566,13 +566,10 @@ body[data-theme="dark"] #twinkle-container {
 
 /* Title Neon Glow */
 body[data-theme="dark"] .app-header h1 {
-    color: #fff;
+    color: #e0f2fe;
     text-shadow: 
-        0 0 5px #fff,
-        0 0 10px #fff,
-        0 0 20px #00f3ff,
-        0 0 40px #00f3ff,
-        0 0 80px #00f3ff;
+        0 0 8px rgba(0, 243, 255, 0.6),
+        0 0 20px rgba(0, 243, 255, 0.4);
 }
 
 /* Task Cards Neon Interaction */
