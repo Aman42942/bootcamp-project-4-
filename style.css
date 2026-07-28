@@ -145,6 +145,11 @@ body[data-theme="dark"] .icon-btn {
     font-size: 0.8rem;
 }
 
+body[data-theme="dark"] .quote-container {
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--text-main);
+}
+
 /* Controls Section */
 .controls-section {
     display: flex;
@@ -298,7 +303,12 @@ body[data-theme="dark"] .search-group select {
     flex-direction: column;
     min-height: 500px;
     border: 2px solid transparent;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease;
+}
+
+body[data-theme="dark"] .kanban-column {
+    background: rgba(10, 10, 20, 0.5);
+    border-color: rgba(255,255,255,0.05);
 }
 
 .kanban-column.drag-over {
